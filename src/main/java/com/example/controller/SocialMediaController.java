@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,10 +37,22 @@ public class SocialMediaController {
             newAccount = accountService.registerAccount(account);
         } catch (DuplicateUsernameException e) {
             // not sure about body args
-            return ResponseEntity.status(409).body("Username is already taken.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username is already taken.");
         } catch (BadRequestException e) {
-            return ResponseEntity.status(400).body("Invalid account registration data.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid account registration data.");
         } 
         return ResponseEntity.status(200).body(newAccount);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody Account account) {
+        
+        Account loggedIn = null;
+        try {
+            loggedIn = accountService.login(account);
+        } catch (BadRequestException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(loggedIn);
     }
 }

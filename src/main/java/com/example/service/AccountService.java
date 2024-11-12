@@ -20,8 +20,8 @@ public class AccountService {
     public Account registerAccount(Account account) {
 
         // Account with that username does not already exist
-        for (Account acc : accountRepository.findAll()) {
-            if (account.getUsername().equals(acc.getUsername())) {
+        for (Account existingAccount : accountRepository.findAll()) {
+            if (account.getUsername().equals(existingAccount.getUsername())) {
                 throw new DuplicateUsernameException("An account with this username already exists.");
             }
         }
@@ -34,6 +34,18 @@ public class AccountService {
             throw new BadRequestException(
                     "Username must not be blank and password must be at least 4 characters long.");
         }
+    }
+
+    public Account login(Account account) {
+
+        // Checking if another account exists with matching username and password
+        for (Account existingAccount : accountRepository.findAll()) {
+            if (account.getUsername().equals(existingAccount.getUsername()) &&
+                    account.getPassword().equals(existingAccount.getPassword())) {
+                return existingAccount;
+            }
+        }
+        throw new BadRequestException("Wrong username or password");
     }
 
 }
