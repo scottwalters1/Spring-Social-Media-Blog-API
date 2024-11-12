@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -74,6 +75,12 @@ public class SocialMediaController {
     public ResponseEntity<Message> getMessageById(@PathVariable int id) {
         Message message = messageService.getMessageById(id);
         return ResponseEntity.status(HttpStatus.OK).body(message);
+    }
+
+    @DeleteMapping("/messages/{id}")
+    public ResponseEntity<Integer> deleteMessage(@PathVariable int id) {
+        Integer rows = messageService.deleteMessage(id);
+        return ResponseEntity.status(HttpStatus.OK).body(rows);
     }
 
     @ExceptionHandler(BadRequestException.class)
