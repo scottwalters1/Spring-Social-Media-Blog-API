@@ -47,11 +47,11 @@ public class AccountService {
                 return existingAccount;
             }
         }
-        throw new BadRequestException("Wrong username or password");
+        throw new UnauthorizedAccessException("Incorrect username or password");
     }
 
-    public Account getAccountById(int id) {
-        return accountRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Account not found"));
-    }
+    // public Account getAccountById(int id) {
+    //     return accountRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Account not found"));
+    // }
 
 }

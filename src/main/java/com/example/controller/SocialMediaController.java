@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,48 +42,43 @@ public class SocialMediaController {
 
     @PostMapping("/register")
     public ResponseEntity createAccount(@RequestBody Account account) {
-
         Account newAccount = null;
-        try {
-            newAccount = accountService.registerAccount(account);
-        } catch (DuplicateUsernameException e) {
-            // not sure about body args
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username is already taken.");
-        } catch (BadRequestException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid account registration data.");
-        }
+        newAccount = accountService.registerAccount(account);
         return ResponseEntity.status(200).body(newAccount);
     }
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody Account account) {
-
-        Account loggedIn = null;
-        try {
-            loggedIn = accountService.login(account);
-        } catch (BadRequestException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
-        }
+        // UnauthorizedAccessException handled by exception handler
+        Account loggedIn = accountService.login(account);
         return ResponseEntity.status(HttpStatus.OK).body(loggedIn);
     }
 
     @PostMapping("/messages")
     public ResponseEntity createMessage(@RequestBody Message message) {
-
-        Message createdMessage = null;
-        // Account postedBy = null;
-
-        try {
-            accountService.getAccountById(message.getPostedBy()); 
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nonexistent user");
-        }
-        try {
-            
-            createdMessage = messageService.createMessage(message);
-        } catch (BadRequestException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad message");
-        }
+        // BadRequestException and ResourceNotFoundException handled by exception
+        // handler
+        Message createdMessage = messageService.createMessage(message);
         return ResponseEntity.status(HttpStatus.OK).body(createdMessage);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<String> handleBadRequestException(BadRequestException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request");
+    }
+
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    public ResponseEntity<String> handleUnauthorizedAccessException(UnauthorizedAccessException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
+    @ExceptionHandler(DuplicateUsernameException.class)
+    public ResponseEntity<String> DuplicateUsernameException(DuplicateUsernameException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 }
