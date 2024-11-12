@@ -1,5 +1,7 @@
 package com.example.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,8 @@ public class MessageService {
     public Message createMessage(Message message) {
 
         // throws ResourceNotFoundException
-        Account acc = accountRepository.findById(message.getPostedBy()).orElseThrow(() -> new ResourceNotFoundException("Account not found"));
+        Account acc = accountRepository.findById(message.getPostedBy())
+                .orElseThrow(() -> new ResourceNotFoundException("Account not found"));
 
         if (message.getMessageText().length() <= 255 &&
                 !message.getMessageText().equals("")) {
@@ -35,5 +38,22 @@ public class MessageService {
         }
         throw new BadRequestException("Message must be between 1 and 255 characters.");
 
+    }
+
+    public List<Message> getAllMessages() {
+        ArrayList<Message> result = new ArrayList<>();
+        for (Message message : messageRepository.findAll()) {
+            result.add(message);
+        }
+        return result;
+    }
+
+    public Message getMessageById(int id) {
+        Optional<Message> message = messageRepository.findById(id);
+        if (message.isPresent()) {
+            return message.get();
+        } else {
+            return null;
+        }
     }
 }
