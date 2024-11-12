@@ -44,7 +44,6 @@ public class SocialMediaController {
         this.messageService = messageService;
     }
 
-    // look into this syntax, investigate why extra shit in labs is there
     @PostMapping("/register")
     public ResponseEntity<Account> createAccount(@RequestBody Account account) {
         // BadRequestException and DuplicateUsernameException handled by exception
