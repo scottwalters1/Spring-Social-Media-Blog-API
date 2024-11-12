@@ -1,5 +1,7 @@
 package com.example.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +48,10 @@ public class AccountService {
             }
         }
         throw new BadRequestException("Wrong username or password");
+    }
+
+    public Account getAccountById(int id) {
+        return accountRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Account not found"));
     }
 
 }
