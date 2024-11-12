@@ -1,7 +1,5 @@
 package com.example.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +26,7 @@ public class AccountService {
             }
         }
 
-        // Password length at least 3 and username not blank
+        // Password length at least 4 and username not blank
         if (account.getPassword().length() >= 4 &&
                 account.getUsername() != "") {
             return accountRepository.save(account);
@@ -49,9 +47,4 @@ public class AccountService {
         }
         throw new UnauthorizedAccessException("Incorrect username or password");
     }
-
-    // public Account getAccountById(int id) {
-    //     return accountRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Account not found"));
-    // }
-
 }

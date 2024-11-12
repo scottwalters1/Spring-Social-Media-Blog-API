@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,6 +47,8 @@ public class SocialMediaController {
     // look into this syntax, investigate why extra shit in labs is there
     @PostMapping("/register")
     public ResponseEntity<Account> createAccount(@RequestBody Account account) {
+        // BadRequestException and DuplicateUsernameException handled by exception
+        // handler
         Account newAccount = null;
         newAccount = accountService.registerAccount(account);
         return ResponseEntity.status(200).body(newAccount);
@@ -88,8 +89,15 @@ public class SocialMediaController {
 
     @PatchMapping("/messages/{id}")
     public ResponseEntity<Integer> updateMessage(@PathVariable int id, @RequestBody MessageUpdateRequest request) {
+        // BadRequestException handled by exception handler
         Integer rows = messageService.updateMessage(id, request);
         return ResponseEntity.status(HttpStatus.OK).body(rows);
+    }
+
+    @GetMapping("/accounts/{id}/messages")
+    public ResponseEntity<List<Message>> getAllMessagesById(@PathVariable int id) {
+        List<Message> messages = messageService.getAllMessagesById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(messages);
     }
 
     @ExceptionHandler(BadRequestException.class)
