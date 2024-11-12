@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.dto.MessageUpdateRequest;
 import com.example.entity.Account;
 import com.example.entity.Message;
 import com.example.exception.BadRequestException;
@@ -36,7 +37,7 @@ public class MessageService {
                 !message.getMessageText().equals("")) {
             return messageRepository.save(message);
         }
-        throw new BadRequestException("Message must be between 1 and 255 characters.");
+        throw new BadRequestException("Message must be between 1 and 255 characters");
 
     }
 
@@ -64,6 +65,25 @@ public class MessageService {
             return 1;
         } else {
             return null;
+        }
+    }
+
+    public Integer updateMessage(int id, MessageUpdateRequest request) {
+
+        String messageText = request.getMessageText();
+
+        if (messageText.equals("") ||messageText.length() > 255) {
+            throw new BadRequestException("Message must be between 1 and 255 characters");
+        }
+        Optional<Message> toUpdate = messageRepository.findById(id);
+        if (toUpdate.isPresent()) { 
+            Message message = toUpdate.get();
+            message.setMessageText(messageText);
+            messageRepository.save(message);
+            return 1;
+        } else {
+            // return null;
+            throw new BadRequestException("Message not found");
         }
     }
 }
