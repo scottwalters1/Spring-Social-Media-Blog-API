@@ -3,7 +3,6 @@ package com.example.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,10 +54,10 @@ public class SocialMediaController {
      * @return the created account with HTTP status 200 (OK)
      */
     @PostMapping("/register")
-    public ResponseEntity<Account> createAccount(@RequestBody Account account) {
+    public ResponseEntity<Account> registerAccount(@RequestBody Account account) {
         Account newAccount = null;
         newAccount = accountService.registerAccount(account);
-        return ResponseEntity.status(200).body(newAccount);
+        return ResponseEntity.ok().body(newAccount);
     }
 
     /**
@@ -70,7 +69,7 @@ public class SocialMediaController {
     @PostMapping("/login")
     public ResponseEntity<Account> login(@RequestBody Account account) {
         Account loggedIn = accountService.login(account);
-        return ResponseEntity.status(HttpStatus.OK).body(loggedIn);
+        return ResponseEntity.ok().body(loggedIn);
     }
 
     /**
@@ -82,7 +81,7 @@ public class SocialMediaController {
     @PostMapping("/messages")
     public ResponseEntity<Message> createMessage(@RequestBody Message message) {
         Message createdMessage = messageService.createMessage(message);
-        return ResponseEntity.status(HttpStatus.OK).body(createdMessage);
+        return ResponseEntity.ok().body(createdMessage);
     }
 
     /**
@@ -93,7 +92,7 @@ public class SocialMediaController {
     @GetMapping("/messages")
     public ResponseEntity<List<Message>> getAllMessages() {
         List<Message> messages = messageService.getAllMessages();
-        return ResponseEntity.status(HttpStatus.OK).body(messages);
+        return ResponseEntity.ok().body(messages);
     }
 
     /**
@@ -105,7 +104,7 @@ public class SocialMediaController {
     @GetMapping("/messages/{id}")
     public ResponseEntity<Message> getMessageById(@PathVariable int id) {
         Message message = messageService.getMessageById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(message);
+        return ResponseEntity.ok().body(message);
     }
 
     /**
@@ -118,7 +117,7 @@ public class SocialMediaController {
     @DeleteMapping("/messages/{id}")
     public ResponseEntity<Integer> deleteMessage(@PathVariable int id) {
         Integer rows = messageService.deleteMessage(id);
-        return ResponseEntity.status(HttpStatus.OK).body(rows);
+        return ResponseEntity.ok().body(rows);
     }
 
     /**
@@ -132,7 +131,7 @@ public class SocialMediaController {
     @PatchMapping("/messages/{id}")
     public ResponseEntity<Integer> updateMessage(@PathVariable int id, @RequestBody MessageUpdateRequest request) {
         Integer rows = messageService.updateMessage(id, request);
-        return ResponseEntity.status(HttpStatus.OK).body(rows);
+        return ResponseEntity.ok().body(rows);
     }
 
     /**
@@ -145,6 +144,6 @@ public class SocialMediaController {
     @GetMapping("/accounts/{id}/messages")
     public ResponseEntity<List<Message>> getAllMessagesById(@PathVariable int id) {
         List<Message> messages = messageService.getAllMessagesById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(messages);
+        return ResponseEntity.ok().body(messages);
     }
 }
