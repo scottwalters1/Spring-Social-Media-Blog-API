@@ -14,18 +14,36 @@ import com.example.exception.ResourceNotFoundException;
 import com.example.repository.AccountRepository;
 import com.example.repository.MessageRepository;
 
+/**
+ * Service class responsible for handling business logic related to messages.
+ */
 @Service
 public class MessageService {
 
     private final MessageRepository messageRepository;
     private final AccountRepository accountRepository;
 
+    /**
+     * Constructs a new MessageService with the given repositories.
+     *
+     * @param messageRepository the repository for accessing message data
+     * @param accountRepository the repository for accessing account data
+     */
     @Autowired
     public MessageService(MessageRepository messageRepository, AccountRepository accountRepository) {
         this.messageRepository = messageRepository;
         this.accountRepository = accountRepository;
     }
 
+    /**
+     * Creates a new message after validating the account and message content.
+     *
+     * @param message the message to be created
+     * @return the saved message
+     * @throws ResourceNotFoundException if the account does not exist
+     * @throws BadRequestException       if the message text is empty or exceeds 255
+     *                                   characters
+     */
     public Message createMessage(Message message) {
 
         // postedBy must refer to a real, existing user
@@ -40,6 +58,11 @@ public class MessageService {
         throw new BadRequestException("Message must be between 1 and 255 characters");
     }
 
+    /**
+     * Retrieves all messages from the repository.
+     *
+     * @return a list of all messages or an empty list if none exist
+     */
     public List<Message> getAllMessages() {
 
         // Return empty list if no messages
@@ -50,6 +73,12 @@ public class MessageService {
         return result;
     }
 
+    /**
+     * Retrieves a message by its ID.
+     *
+     * @param id the ID of the message to retrieve
+     * @return the message with the specified ID or null if not found
+     */
     public Message getMessageById(int id) {
 
         // Return null if no message
@@ -61,6 +90,12 @@ public class MessageService {
         }
     }
 
+    /**
+     * Deletes a message by its ID.
+     *
+     * @param id the ID of the message to delete
+     * @return 1 if the message was deleted, or null if not found
+     */
     public Integer deleteMessage(int id) {
 
         // Return 1 if deleted, else null
@@ -73,6 +108,15 @@ public class MessageService {
         }
     }
 
+    /**
+     * Updates a message's content by its ID.
+     *
+     * @param id      the ID of the message to update
+     * @param request the new message content
+     * @return 1 if the message was updated successfully
+     * @throws BadRequestException if the message content is invalid or message not
+     *                             found
+     */
     public Integer updateMessage(int id, MessageUpdateRequest request) {
 
         String messageText = request.getMessageText();
@@ -95,6 +139,13 @@ public class MessageService {
         }
     }
 
+    /**
+     * Retrieves all messages posted by a specific account ID.
+     *
+     * @param id the ID of the account
+     * @return a list of messages posted by the specified account or an empty list
+     *         if none exist
+     */
     public List<Message> getAllMessagesById(int id) {
 
         // Return empty list if no messages
