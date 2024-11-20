@@ -6,11 +6,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * Controller for handling exceptions.
+ */
 @RestControllerAdvice
 public class ExceptionAndErrorController {
 
     /**
-     * Handles {@link BadRequestException} and returns an HTTP 400 Bad Request response
+     * Handles {@link BadRequestException} and returns an HTTP 400 Bad Request
+     * response
      * with the exception message.
      *
      * @param e the BadRequestException
@@ -23,7 +27,8 @@ public class ExceptionAndErrorController {
     }
 
     /**
-     * Handles {@link UnauthorizedAccessException} and returns an HTTP 401 Unauthorized response
+     * Handles {@link UnauthorizedAccessException} and returns an HTTP 401
+     * Unauthorized response
      * with the exception message.
      *
      * @param e the UnauthorizedAccessException
@@ -36,7 +41,8 @@ public class ExceptionAndErrorController {
     }
 
     /**
-     * Handles {@link ResourceNotFoundException} and returns an HTTP 400 Bad Request response
+     * Handles {@link ResourceNotFoundException} and returns an HTTP 400 Bad Request
+     * response
      * with the exception message.
      *
      * @param e the ResourceNotFoundException
@@ -49,7 +55,8 @@ public class ExceptionAndErrorController {
     }
 
     /**
-     * Handles {@link DuplicateUsernameException} and returns an HTTP 409 Conflict response
+     * Handles {@link DuplicateUsernameException} and returns an HTTP 409 Conflict
+     * response
      * with the exception message.
      *
      * @param e the DuplicateUsernameException
@@ -62,7 +69,8 @@ public class ExceptionAndErrorController {
     }
 
     /**
-     * Handles {@link MissingServletRequestParameterException} and returns an HTTP 400 Bad Request response
+     * Handles {@link MissingServletRequestParameterException} and returns an HTTP
+     * 400 Bad Request response
      * indicating which parameter is missing.
      *
      * @param e the MissingServletRequestParameterException
